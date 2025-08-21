@@ -1,0 +1,72 @@
+[
+  {
+    "id": 1,
+    "name": "Laptop",
+    "description": "High performance laptop",
+    "price": 1200,
+    "image": "https://i.ibb.co/7yW9Jxk/laptop.jpg"
+  },
+  {
+    "id": 2,
+    "name": "Smartphone",
+    "description": "Latest model smartphone",
+    "price": 800,
+    "image": "https://i.ibb.co/ScKcXwX/smartphone.jpg"
+  },
+  {
+    "id": 3,
+    "name": "Headphones",
+    "description": "Noise-cancelling headphones",
+    "price": 200,
+    "image": "https://i.ibb.co/5s3Xt1V/headphones.jpg"
+  },
+  {
+    "id": 4,
+    "name": "Smartwatch",
+    "description": "Track your fitness and notifications",
+    "price": 150,
+    "image": "https://i.ibb.co/xHXm0Rc/smartwatch.jpg"
+  },
+  {
+    "id": 5,
+    "name": "Tablet",
+    "description": "Portable and powerful tablet",
+    "price": 600,
+    "image": "https://i.ibb.co/QmJt4b6/tablet.jpg"
+  },
+  {
+    "id": 6,
+    "name": "Gaming Console",
+    "description": "Next-gen gaming experience",
+    "price": 500,
+    "image": "https://i.ibb.co/L15Mj6M/console.jpg"
+  },
+  {
+    "id": 7,
+    "name": "Bluetooth Speaker",
+    "description": "Portable wireless speaker",
+    "price": 100,
+    "image": "https://i.ibb.co/Qrs0bF6/speaker.jpg"
+  },
+  {
+    "id": 8,
+    "name": "Camera",
+    "description": "Capture stunning photos and videos",
+    "price": 700,
+    "image": "https://i.ibb.co/vDdn1dr/camera.jpg"
+  },
+  {
+    "id": 9,
+    "name": "Keyboard",
+    "description": "Mechanical RGB gaming keyboard",
+    "price": 120,
+    "image": "https://i.ibb.co/GpFRxKn/keyboard.jpg"
+  },
+  {
+    "id": 10,
+    "name": "Mouse",
+    "description": "High precision wireless mouse",
+    "price": 80,
+    "image": "https://i.ibb.co/7RjpWjk/mouse.jpg"
+  }
+]
