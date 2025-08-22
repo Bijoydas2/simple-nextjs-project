@@ -1,15 +1,32 @@
-import products from "../../data/products.json";
+"use client";
+import { useEffect, useState } from "react";
+import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
+import LoadingSpinner from "@/app/components/LoadingSpinner";
 
-export default function ProductDetails({ params }) {
-  const product = products.find((p) => p.id === parseInt(params.id));
+export default function ProductDetails() {
+  const params = useParams();
+  const router = useRouter();
+  const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch(`/api/products?id=${params.id}`)
+      .then(res => res.json())
+      .then(data => {
+        if (!data) router.push("/products"); // not found
+        else setProduct(data);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, [params.id, router]);
+
+  if (loading) return <LoadingSpinner/>;
 
   if (!product)
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen ">
-        <p className="text-red-500 text-xl font-semibold">
-          Product not found
-        </p>
+      <div className="flex flex-col items-center justify-center min-h-screen">
+        <p className="text-red-500 text-xl font-semibold">Product not found</p>
         <Link
           href="/products"
           className="mt-4 bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600 transition"
@@ -21,7 +38,6 @@ export default function ProductDetails({ params }) {
 
   return (
     <div className="max-w-6xl mx-auto p-6 md:p-12 flex flex-col md:flex-row gap-8 bg-white rounded-3xl shadow-2xl my-16">
-      {/* Product Image */}
       <div className="flex-1">
         <img
           src={product.image}
@@ -29,22 +45,12 @@ export default function ProductDetails({ params }) {
           className="w-full h-90 rounded-2xl shadow-lg object-cover"
         />
       </div>
-
-      {/* Product Details */}
       <div className="flex-1 flex flex-col justify-between">
         <div>
-          <h1 className="text-4xl font-extrabold mb-4 text-gray-800">
-            {product.name}
-          </h1>
-          <p className="text-gray-600 mb-6 leading-relaxed">
-            {product.description}
-          </p>
-          <p className="text-3xl font-bold text-blue-600 mb-8">
-            ${product.price}
-          </p>
+          <h1 className="text-4xl font-extrabold mb-4 text-gray-800">{product.name}</h1>
+          <p className="text-gray-600 mb-6 leading-relaxed">{product.description}</p>
+          <p className="text-3xl font-bold text-blue-600 mb-8">${product.price}</p>
         </div>
-
-        {/* Actions */}
         <div className="flex flex-col sm:flex-row gap-4">
           <button className="bg-blue-500 text-white px-8 py-3 rounded-xl shadow-lg hover:bg-blue-600 transition transform hover:scale-105">
             Add to Cart
