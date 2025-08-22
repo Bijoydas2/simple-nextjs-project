@@ -1,16 +1,34 @@
 "use client";
 import { FaStar } from "react-icons/fa";
 import { useRouter } from "next/navigation";
-import products from "../data/products.json";
+import { useEffect, useState } from "react";
 import Link from "next/link";
+import LoadingSpinner from "./LoadingSpinner";
 
 export default function ProductHighlights() {
   const router = useRouter();
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+
   const topProducts = products.slice(0, 6);
+
+  useEffect(() => {
+    fetch("/api/products")
+      .then((res) => res.json())
+      .then((data) => {
+        setProducts(data);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, []);
 
   const handleViewAll = () => {
     router.push("/products");
   };
+
+  if (loading) return <LoadingSpinner/>;
+  if (!products.length) return <p className="text-center mt-10">No products found</p>;
 
   return (
     <section className="py-12 px-6 bg-gray-50">
@@ -23,7 +41,7 @@ export default function ProductHighlights() {
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
         {topProducts.map((product) => (
           <div
-            key={product.id}
+            key={product._id}
             className="bg-white rounded-3xl shadow-md hover:shadow-xl transition-shadow overflow-hidden flex flex-col"
           >
             <div className="relative">
@@ -45,7 +63,7 @@ export default function ProductHighlights() {
                 ${product.price}
               </p>
               <Link
-                href={`/products/${product.id}`}
+                href={`/products/${product._id}`}
                 className="mt-4 inline-block bg-blue-500 text-center text-white px-4 py-2 rounded-xl hover:bg-blue-600 transition"
               >
                 View Details
