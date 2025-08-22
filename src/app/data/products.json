@@ -68,5 +68,26 @@
     "description": "High precision wireless mouse",
     "price": 80,
     "image": "https://i.ibb.co/7RjpWjk/mouse.jpg"
+  },
+  {
+    "id": 1755841030831,
+    "name": "rerer",
+    "description": "ewrewr",
+    "price": "34",
+    "image": "sfsdfsadfsdf"
+  },
+  {
+    "id": 1755841928516,
+    "name": "gdfdf",
+    "description": "dasfdasfd",
+    "price": "343",
+    "image": "3434"
+  },
+  {
+    "id": 1755842044841,
+    "name": "erer",
+    "description": "erer",
+    "price": "56",
+    "image": "rerer"
   }
 ]

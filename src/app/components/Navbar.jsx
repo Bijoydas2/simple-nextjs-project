@@ -1,11 +1,14 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
 import { toast } from "react-toastify";
+import { FiMenu, FiX } from "react-icons/fi";
 
 export default function Navbar() {
+  const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
   const { data: session } = useSession();
 
@@ -15,7 +18,7 @@ export default function Navbar() {
       : "text-gray-700 hover:text-blue-600";
 
   const handleLogout = async () => {
-    await signOut({ redirect: false }); // redirect বন্ধ রাখব
+    await signOut({ redirect: false });
     toast.success("You have logged out successfully!");
   };
 
@@ -25,18 +28,25 @@ export default function Navbar() {
         {/* Logo */}
         <h1 className="text-2xl font-bold text-blue-600">My Shop</h1>
 
-        {/* Centered links */}
-        <div className="flex-1 flex justify-center space-x-8">
+        {/* Desktop Links */}
+        <div className="hidden md:flex flex-1 justify-center space-x-8">
           <Link href="/" className={linkClass("/")}>
             Home
           </Link>
           <Link href="/products" className={linkClass("/products")}>
             Products
           </Link>
+
+          {/* Add Product Link only for logged-in users */}
+          {session && (
+            <Link href="/dashboard/add-product" className={linkClass("/dashboard/add-product")}>
+              Add Product
+            </Link>
+          )}
         </div>
 
-        {/* Right side login/logout button */}
-        <div>
+        {/* Login/Logout Desktop */}
+        <div className="hidden md:flex">
           {session ? (
             <button
               onClick={handleLogout}
@@ -55,7 +65,70 @@ export default function Navbar() {
             </Link>
           )}
         </div>
+
+        {/* Mobile menu button */}
+        <div className="md:hidden">
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="text-gray-700 focus:outline-none"
+          >
+            {isOpen ? <FiX size={24} /> : <FiMenu size={24} />}
+          </button>
+        </div>
       </div>
+
+      {/* Mobile Menu */}
+      {isOpen && (
+        <div className="md:hidden bg-white shadow-md px-6 py-4 flex flex-col space-y-4">
+          <Link
+            href="/"
+            className={linkClass("/")}
+            onClick={() => setIsOpen(false)}
+          >
+            Home
+          </Link>
+          <Link
+            href="/products"
+            className={linkClass("/products")}
+            onClick={() => setIsOpen(false)}
+          >
+            Products
+          </Link>
+
+          
+          {session && (
+            <Link
+              href="/dashboard/add-product"
+              className={linkClass("/dashboard/add-product")}
+              onClick={() => setIsOpen(false)}
+            >
+              Add Product
+            </Link>
+          )}
+
+          {session ? (
+            <button
+              onClick={() => {
+                handleLogout();
+                setIsOpen(false);
+              }}
+              className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition"
+            >
+              Logout
+            </button>
+          ) : (
+            <Link
+              href="/login"
+              className={`bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition ${
+                pathname === "/login" ? "ring-2 ring-blue-400" : ""
+              }`}
+              onClick={() => setIsOpen(false)}
+            >
+              Login
+            </Link>
+          )}
+        </div>
+      )}
     </nav>
   );
 }
