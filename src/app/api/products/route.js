@@ -1,12 +1,10 @@
-import fs from "fs/promises";
-import path from "path";
-
-const filePath = path.join(process.cwd(), "src/app/data/products.json");
+import clientPromise from "@/lib/mongodb";
 
 export async function GET() {
   try {
-    const data = await fs.readFile(filePath, "utf-8");
-    const products = JSON.parse(data);
+    const client = await clientPromise;
+    const db = client.db("nextjs-shop");
+    const products = await db.collection("products").find({}).toArray();
     return new Response(JSON.stringify(products), { status: 200 });
   } catch (err) {
     console.error("GET /api/products error:", err);
@@ -16,30 +14,19 @@ export async function GET() {
 
 export async function POST(req) {
   try {
-    const body = await req.json();
-    const { name, description, price, image } = body;
+    const client = await clientPromise;
+    const db = client.db("nextjs-shop");
 
-    // Validate required fields
+    const { name, description, price, image } = await req.json();
+
     if (!name || !description || !price || !image) {
       return new Response("Missing fields", { status: 400 });
     }
 
-    const data = await fs.readFile(filePath, "utf-8");
-    const products = JSON.parse(data);
+    const newProduct = { name, description, price, image, createdAt: new Date() };
+    const result = await db.collection("products").insertOne(newProduct);
 
-    const newProduct = {
-      id: Date.now(),
-      name,
-      description,
-      price,
-      image,
-    };
-
-    products.push(newProduct);
-
-    await fs.writeFile(filePath, JSON.stringify(products, null, 2));
-
-    return new Response(JSON.stringify(newProduct), { status: 201 });
+    return new Response(JSON.stringify(result), { status: 201 });
   } catch (err) {
     console.error("POST /api/products error:", err);
     return new Response("Failed to add product", { status: 500 });
